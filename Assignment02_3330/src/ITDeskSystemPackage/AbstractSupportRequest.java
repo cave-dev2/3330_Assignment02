@@ -24,7 +24,7 @@ A request should not be resolved more than once. A repeated resolution attempt s
 consistently, preferably by throwing IllegalStateException.
 */
 
-public class AbstractSupportRequest implements SupportRequest {
+public abstract class AbstractSupportRequest implements SupportRequest {
 
 	//Define class variables
 	private final int id; 
