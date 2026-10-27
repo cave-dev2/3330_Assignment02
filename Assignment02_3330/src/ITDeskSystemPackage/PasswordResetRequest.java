@@ -18,7 +18,7 @@ public class PasswordResetRequest extends AbstractSupportRequest {
 	//Class constructor
 	public PasswordResetRequest(int id, String title, int basePoints, boolean resolved, String accountName) {
 
-		super(id, title, basePoints, resolved);
+		super(id, title, basePoints, 0, resolved);
 		
 		//Check invariants
 		if(accountName == null || accountName.isBlank()) throw new IllegalArgumentException("Password-related Request Account Name cannot be null");

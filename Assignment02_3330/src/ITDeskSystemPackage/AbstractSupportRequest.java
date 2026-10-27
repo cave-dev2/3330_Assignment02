@@ -30,10 +30,11 @@ public abstract class AbstractSupportRequest implements SupportRequest {
 	private final int id; 
 	private final String title;
 	private final int basePoints;
+	private int additionalPoints;
 	private boolean resolved;
 
 	//Class constructor
-	public AbstractSupportRequest(int id, String title, int basePoints, boolean resolved) {
+	public AbstractSupportRequest(int id, String title, int basePoints, int additionalPoints, boolean resolved) {
 
 		//Check invariants
 		if(basePoints <= 0) throw new IllegalArgumentException("Support Request ID cannot be negative");
@@ -44,6 +45,7 @@ public abstract class AbstractSupportRequest implements SupportRequest {
 		this.id = id; 
 		this.title = title;
 		this.basePoints = basePoints;
+		this.additionalPoints = additionalPoints;
 		this.resolved = resolved;
 		
 	}
@@ -79,7 +81,7 @@ public abstract class AbstractSupportRequest implements SupportRequest {
 		if(this.resolved==true) throw new IllegalArgumentException("Support Request cannot be resolved twice");
 		
 		this.resolved = true;
-		technician.addPoints(basePoints);
+		technician.addPoints(basePoints + additionalPoints);
 		return basePoints;
 		
 	}
