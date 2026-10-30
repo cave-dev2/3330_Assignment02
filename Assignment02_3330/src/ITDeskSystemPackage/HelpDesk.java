@@ -96,16 +96,16 @@ public class HelpDesk {
 		if(this.assignments.containsKey(technicican)) {
 			
 			// Isolate technician's assigned requests 
-			List<SupportRequest> technicicanRequests = this.assignments.get(technician)
+			List<SupportRequest> technicicanRequests = this.assignments.get(technician);
 					
 			// Validate that technician has not been assigned the task already 
 			if(technicianRequests.contains(request)) {
-				throw new IllegalArgumentException(technician + " already assigned to this request.")
+				throw new IllegalArgumentException(technician + " already assigned to this request.");
 			}
 			
 			// If technician hasn't already been assigned the request, add to assignments
 			technicianRequests.add(request); 
-			return technician + " assigned to request."
+			return technician + " assigned to request.";
 		}
 		
 		// If technician does not currently have a list of assignments, create one 
@@ -119,6 +119,59 @@ public class HelpDesk {
 			
 			// Add technician assignment to the current object's map
 			this.assignments.put(technician, technicianRequests);
-		}
+			
+			// Return message 
+			return "Created assignment list for " + technician; 
+			}
 	}
+		
+		// resolveRequest method 
+		public int resolveRequest(Technicican technician, int requestId) {
+					
+			// If passed technicican does not have an assignment list, throw an IllegalArgumentException
+			if(this.assignments.containsKey(technicican)) {
+				
+				// Isolate technician's assignments
+				List<SupportRequest> technicianRequests = this.assignments.get(technicican)
+						
+				// Validate that passed requestId is found in technician's assignments
+				if(technicianRequests.containsKey(requestId)) {
+					
+					// If both technician and requestId exist as expected, 
+					// resolve request and return the service points awarded.
+					this.requestsById.get(requestId).resolveFor(technician);
+					return requestsById.getBasePoints(); 
+				}
+			}
+		}
+		
+		// printAllRequests() method 
+		public void printAllRequests() {
+			
+			// Loop through current HelpDesk object's requestsById field to print each one
+			for(request in this.requestsById) {
+				System.out.println(request + "\n");
+			}
+		}
+		
+		// printAssignmentsFor() method 
+		public void printAssignmentsFor(Technician technician) {
+			
+			// Check that technician's assignment list is not null 
+			if(this.assignments.get(technician) != null) {
+				
+				// If technician has an assignment list that is not null, 
+				// print each request associated with the technicican 
+				System.out.println("Assignments for " + technician + ":");
+				for(request in this.assignments.get(technician)) {
+					System.out.println(request + "\n");
+				}
+			}
+			
+			// If technician's assignment list is null, return error message 
+			else {
+				System.out.println(technician + " has a null assignment list.");
+			}
+		}
+		
 }
