@@ -1,27 +1,11 @@
 package ITDeskSystemPackage;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 /*
 This class coordinates request storage and assignment.
-
-Required fields (minimum):
-• Map<Integer, SupportRequest> requestsById
-• Map<Technician, List<SupportRequest>> assignments
-
-Required behavior:
-• int resolveRequest(Technician technician, int requestId)
-– finds the request in that technician’s assignments
-– calls request.resolveFor(technician) polymorphically
-– returns the service points awarded
-• void printAllRequests()
-• void printAssignmentsFor(Technician technician)
-
-Design requirements:
-• Keep fields private.
-• Do not expose internal collections directly.
-• Avoid long message chains and knowledge leaks.
-• The help desk should not perform type checking such as if (request instanceof DeviceSetupRequest).
-• Request-specific behavior belongs in the request classes, not in HelpDesk.
-• Keep HelpDesk focused on coordination rather than turning it into a god class.
 */
 
 public class HelpDesk {
@@ -62,7 +46,7 @@ public class HelpDesk {
 	public SupportRequest findRequest(int id) {
 		
 		// Search for support request using corresponding ID
-		if (this.requestsById.containsKey(request.getId())) {
+		if (this.requestsById.containsKey(id)) {
 			
 			// If ID is found, return support request 
 			return this.requestsById.get(id); 
@@ -75,28 +59,23 @@ public class HelpDesk {
 	}
 	
 	// assignRequest method 
-	public string assignRequest(Technician technician, int requestId) {
+	public String assignRequest(Technician technician, int requestId) {
 		
 		// We choose to only allow for a request to be assigned to a technician one time. 
 		
 		// Find the desired SupportRequest 
-		this.findRequest(requestId);
+		SupportRequest request = this.findRequest(requestId);
 		
 		// Validate that request exists 
 		if(this.findRequest(requestId) == null) {
 			throw new IllegalArgumentException("Request does not exist.");
 		}
 		
-		// Validate taht technician is not null
-	    if (technician == null) {
-	        throw new IllegalArgumentException("Technician cannot be null");
-	    }
-		
 		// Validate that desired technician exists in assignments 
-		if(this.assignments.containsKey(technicican)) {
+		if(this.assignments.containsKey(technician)) {
 			
 			// Isolate technician's assigned requests 
-			List<SupportRequest> technicicanRequests = this.assignments.get(technician);
+			List<SupportRequest> technicianRequests = this.assignments.get(technician);
 					
 			// Validate that technician has not been assigned the task already 
 			if(technicianRequests.contains(request)) {
@@ -108,49 +87,52 @@ public class HelpDesk {
 			return technician + " assigned to request.";
 		}
 		
-		// If technician does not currently have a list of assignments, create one 
+		// If technician is not found in HelpDesk object, throw IllegalArgumentException  
 		else {
 			
-			// Create SupportRequest list 
-			List<SupportRequest> technicianRequests = new ArrayList(); 
+			throw new IllegalArgumentException("Technician not found in Help Desk");
 			
-			// Add request 
-			technicianRequests.add(request);
-			
-			// Add technician assignment to the current object's map
-			this.assignments.put(technician, technicianRequests);
-			
-			// Return message 
-			return "Created assignment list for " + technician; 
 			}
 	}
 		
 		// resolveRequest method 
-		public int resolveRequest(Technicican technician, int requestId) {
+		public int resolveRequest(Technician technician, int requestId) {
 					
-			// If passed technicican does not have an assignment list, throw an IllegalArgumentException
-			if(this.assignments.containsKey(technicican)) {
+			// If passed technician does not have an assignment list, throw an IllegalArgumentException
+			if(this.assignments.containsKey(technician)) {
 				
 				// Isolate technician's assignments
-				List<SupportRequest> technicianRequests = this.assignments.get(technicican)
-						
-				// Validate that passed requestId is found in technician's assignments
-				if(technicianRequests.containsKey(requestId)) {
+				List<SupportRequest> technicianRequests = this.assignments.get(technician);
+				
+				// Loop through technicianRequests to validate that technician has been assigned to the request
+				for(SupportRequest request : technicianRequests) {
 					
-					// If both technician and requestId exist as expected, 
-					// resolve request and return the service points awarded.
-					this.requestsById.get(requestId).resolveFor(technician);
-					return requestsById.getBasePoints(); 
+					// Once request is found, call resolveFor() method and return points awarded
+					int currentId = request.getId();
+					if(currentId == requestId) {
+						int pointsAwarded = this.requestsById.get(requestId).resolveFor(technician);
+						return pointsAwarded; 
+					}
+					
 				}
+				// If request isn't found, throw IllegalArgumentException 
+				throw new IllegalArgumentException("Request not assigned to this technician.");
 			}
+		
+			// If passed technician does not have an assignment list, throw an IllegalArgumentException
+			else {
+				throw new IllegalArgumentException("Technician not present in assignment list.");
+			}
+
 		}
 		
 		// printAllRequests() method 
 		public void printAllRequests() {
 			
 			// Loop through current HelpDesk object's requestsById field to print each one
-			for(request in this.requestsById) {
-				System.out.println(request + "\n");
+			List<SupportRequest> requestList = new ArrayList<>(this.requestsById.values()); 
+			for(SupportRequest request : requestList) {
+				System.out.println(request);
 			}
 		}
 		
@@ -161,10 +143,10 @@ public class HelpDesk {
 			if(this.assignments.get(technician) != null) {
 				
 				// If technician has an assignment list that is not null, 
-				// print each request associated with the technicican 
+				// print each request associated with the technician 
 				System.out.println("Assignments for " + technician + ":");
-				for(request in this.assignments.get(technician)) {
-					System.out.println(request + "\n");
+				for(SupportRequest request : this.assignments.get(technician)) {
+					System.out.println(request);
 				}
 			}
 			
