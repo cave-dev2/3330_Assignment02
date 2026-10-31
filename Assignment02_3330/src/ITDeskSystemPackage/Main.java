@@ -95,11 +95,11 @@ public class Main {
 		helpDesk.resolveRequest(leonardE, 30);
 		
 		// --- Print all requests ---
-		System.out.println("Print all requests: ");
+		System.out.println("   Print all requests: ");
 		helpDesk.printAllRequests(); 
 		
 		// --- Print assignments for each technician --- 
-		System.out.println("\nPrint Assignments for each technician: ");
+		System.out.println("\n   Print Assignments for each technician: ");
 		List<Technician> techList = new ArrayList<>(assignments.keySet()); 
 		
 		for(Technician tech : techList) {
@@ -107,17 +107,17 @@ public class Main {
 		}
 		
 		// ---  Print final technician service point totals ---
-		System.out.println("\nPrint final technician service points totals: ");
+		System.out.println("\n   Print final technician service points totals: ");
 		for(Technician tech : techList) {
 			System.out.println(tech);
 		}
 		
 		// --- Use HelpDeskUtil.sumPoints to print the total service points across technicians --- 
-		System.out.println("\nTotal service points across technicians: " + HelpDeskUtil.sumPoints(techList));
+		System.out.println("\n   Total service points across technicians: " + HelpDeskUtil.sumPoints(techList));
 		
 		// Fail-fast error checking example: 
 		// Assigning a request to a technician who is not in the HelpDesk object
-		System.out.println("\nFail-Fast error checking:");
+		System.out.println("\n   Fail-Fast error checking:");
 		Technician jaceE = new Technician("Jace", 0); 
 		try {
 			helpDesk.assignRequest(jaceE, 31); 

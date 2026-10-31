@@ -68,7 +68,7 @@ public class HelpDesk {
 		
 		// Validate that request exists 
 		if(this.findRequest(requestId) == null) {
-			throw new IllegalArgumentException("Request does not exist.");
+			throw new IllegalArgumentException("Request ID does not exist");
 		}
 		
 		// Validate that desired technician exists in assignments 
@@ -79,7 +79,7 @@ public class HelpDesk {
 					
 			// Validate that technician has not been assigned the task already 
 			if(technicianRequests.contains(request)) {
-				throw new IllegalArgumentException(technician + " already assigned to this request.");
+				throw new IllegalArgumentException(technician + " already assigned to this request");
 			}
 			
 			// If technician hasn't already been assigned the request, add to assignments
@@ -116,12 +116,12 @@ public class HelpDesk {
 					
 				}
 				// If request isn't found, throw IllegalArgumentException 
-				throw new IllegalArgumentException("Request not assigned to this technician.");
+				throw new IllegalArgumentException("Request not assigned to this technician");
 			}
 		
 			// If passed technician does not have an assignment list, throw an IllegalArgumentException
 			else {
-				throw new IllegalArgumentException("Technician not present in assignment list.");
+				throw new IllegalArgumentException("Technician not present in assignment list");
 			}
 
 		}
